@@ -81,11 +81,13 @@ public class CarController : MonoBehaviour
     public void SteerInput(float input)
     {
         steerInput = input;
+
     }
     void GetInputs()
     {
         // Force forward motion regardless of control mode
-        moveInput = 1.0f;
+
+        moveInput = Input.GetAxis("Vertical");
 
         steerInput = Input.GetAxis("Horizontal");
 
@@ -133,11 +135,10 @@ public class CarController : MonoBehaviour
     {
         MaxSpeed();
 
-      
         
         foreach (var wheel in wheels)
         {
-            wheel.wheelCollider.motorTorque = 600 * maxAcceleration * Time.fixedDeltaTime;
+            wheel.wheelCollider.motorTorque = 600 * maxAcceleration * moveInput * Time.fixedDeltaTime;
 
 
         }
