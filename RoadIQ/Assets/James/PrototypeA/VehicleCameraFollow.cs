@@ -12,16 +12,37 @@ public class CameraFollow : MonoBehaviour
 
     [SerializeField] private Transform target;
 
+
+
+    [SerializeField] private float rotationSpeed = 5f;
+    public Vector3 rotationOffset = new Vector3(0f, 0f, -10f);
+
     // Update is called once per frame
     void LateUpdate()
     {
-        Vector3 targetPosition = target.position + offset;
+        //Vector3 targetPosition = target.position + offset;
+
+        // Position follows target and rotates with it
+        Vector3 targetPosition = target.position + target.rotation * offset;
+
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
 
-       
-        transform.LookAt(target);
+        // Smoothly match target rotation
+        Quaternion targetRotation = target.rotation;
+        Quaternion desiredRotation = target.rotation * Quaternion.Euler(rotationOffset);
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, rotationSpeed * Time.deltaTime);
+
+
+        
 
     }
 
+    
+
+    
+   
+
+        
 
 }
