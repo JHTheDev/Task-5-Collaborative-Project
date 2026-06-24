@@ -911,6 +911,7 @@ GameObject:
   - component: {fileID: 2571263142257471138}
   - component: {fileID: 4536622111813243693}
   - component: {fileID: 1874855988459816138}
+  - component: {fileID: -6360070408799144820}
   m_Layer: 0
   m_Name: MuscleCar
   m_TagString: Player
@@ -1042,6 +1043,22 @@ MonoBehaviour:
   - {fileID: 4838598469662645225, guid: 2057b2dc0b056e3498e47ad3bf1bb390, type: 3}
   nextSpawnPoint: {x: 0, y: 0, z: 400}
   tileSpawned: 0
+  deletedelay: 0
+--- !u!114 &-6360070408799144820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7597572677335538823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4ddc6b7802e8e941a5383443c443feb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  carRb: {fileID: 2571263142257471138}
+  speedText: {fileID: 0}
+  showKPH: 1
 --- !u!1 &7727960801070518742
 GameObject:
   m_ObjectHideFlags: 0
