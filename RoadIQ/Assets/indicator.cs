@@ -15,7 +15,7 @@ public class IndicatorLight : MonoBehaviour
     void Start()
     {
         rightindicatorLight.enabled = false;
-        rightindicatorLight.enabled = false;
+        leftindicatorLight.enabled = false;
     }
 
     void Update()
