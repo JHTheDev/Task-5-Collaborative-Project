@@ -6,6 +6,7 @@ public class Speedometer : MonoBehaviour
     [Header("References")]
     public Rigidbody carRb;
     public TextMeshProUGUI speedText;
+    public float speedmultiplyer;
 
     [Header("Settings")]
     public bool showKPH = true;
@@ -22,7 +23,7 @@ public class Speedometer : MonoBehaviour
 
         if (showKPH)
         {
-            float speedKPH = currentSpeed * 3.6f;
+            float speedKPH = currentSpeed * speedmultiplyer;
             speedText.text = Mathf.RoundToInt(speedKPH) + " km/h";
         }
         else

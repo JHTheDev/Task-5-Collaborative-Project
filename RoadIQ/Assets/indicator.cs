@@ -3,8 +3,10 @@ using System.Collections;
 
 public class IndicatorLight : MonoBehaviour
 {
-    public Light indicatorLight;
-    public KeyCode toggleKey = KeyCode.F;
+    public Light rightindicatorLight;
+    public Light leftindicatorLight;
+    public KeyCode LIndicatortoggleKey = KeyCode.J;
+    public KeyCode RIndicatortoggleKey = KeyCode.K;
     public float flashInterval = 0.5f;
 
     private bool isFlashing = false;
@@ -12,31 +14,49 @@ public class IndicatorLight : MonoBehaviour
 
     void Start()
     {
-        indicatorLight.enabled = false;
+        rightindicatorLight.enabled = false;
+        rightindicatorLight.enabled = false;
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(toggleKey))
+        if (Input.GetKeyDown(RIndicatortoggleKey))
         {
             isFlashing = !isFlashing;
 
             if (isFlashing)
             {
-                flashRoutine = StartCoroutine(FlashLight());
+                flashRoutine = StartCoroutine(FlashLight(rightindicatorLight));
             }
             else
             {
                 StopCoroutine(flashRoutine);
-                indicatorLight.enabled = false;
+                rightindicatorLight.enabled = false;
             }
+        }
+
+        else if (Input.GetKeyDown(LIndicatortoggleKey))
+        {
+            isFlashing = !isFlashing;
+
+            if (isFlashing)
+            {
+                flashRoutine = StartCoroutine(FlashLight(leftindicatorLight));
+            }
+            else
+            {
+                StopCoroutine(flashRoutine);
+                leftindicatorLight.enabled = false;
+            }
+            
         }
     }
 
-    IEnumerator FlashLight()
+    IEnumerator FlashLight(Light indicatorLight)
     {
         while (true)
         {
+
             indicatorLight.enabled = !indicatorLight.enabled;
             yield return new WaitForSeconds(flashInterval);
         }

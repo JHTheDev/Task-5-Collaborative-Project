@@ -50,9 +50,6 @@ public class CarController : MonoBehaviour
 
     [SerializeField] int maxspeed;
     bool stopMoving;
-    public bool clamprotation = true;
-    
-    //private CarLights carLights;
    
     public void Start()
     {
@@ -68,10 +65,6 @@ public class CarController : MonoBehaviour
     {
         GetInputs();
         AnimateWheels();
-        if (clamprotation)
-        {
-            ClampRotationRigidbody();
-        }
 
         Move();
         Steer();
@@ -85,7 +78,6 @@ public class CarController : MonoBehaviour
     }
     void GetInputs()
     {
-        // Force forward motion regardless of control mode
 
         moveInput = Input.GetAxis("Vertical");
 
@@ -94,32 +86,6 @@ public class CarController : MonoBehaviour
      
         
     }
-
- 
-
-
-    void ClampRotationRigidbody()
-    {
-        Quaternion currentRot = carRb.rotation;
-        Vector3 euler = currentRot.eulerAngles;
-
-        float x = (euler.x > 180) ? euler.x - 360 : euler.x;
-        float z = (euler.z > 180) ? euler.z - 360 : euler.z;
-        float y = (euler.y > 180) ? euler.y - 360 : euler.y;
-
-        float clampedX = Mathf.Clamp(x, -25f, 25f);
-        float clampedZ = Mathf.Clamp(z, -25f, 25f);
-        float clampedY = Mathf.Clamp(y, -25f, 25f);
-
-        Quaternion targetRot = Quaternion.Euler(clampedX, clampedY, clampedZ);
-        Quaternion newRot = Quaternion.Slerp(currentRot, targetRot, Time.fixedDeltaTime * 1f);
-        carRb.MoveRotation(newRot);
-
-        carRb.angularVelocity *= 0.5f;
-    }
-
-
-
 
 
     void MaxSpeed()
@@ -170,8 +136,8 @@ public class CarController : MonoBehaviour
         }
     }
 
-    [SerializeField] float explosionForce;
-    private void OnCollisionEnter(Collision collision)
+   
+    /*private void OnCollisionEnter(Collision collision)
     {
         
         // Only affect certain layers (like obstacles)
@@ -179,14 +145,13 @@ public class CarController : MonoBehaviour
         {
 
             
-            carRb.AddExplosionForce(explosionForce, collision.contacts[0].point, 5f, 1f, ForceMode.Impulse);
+           
 
         }
-    }
+    }*/
 
-    private bool Checkpointtouched;
 
-    private void OnTriggerEnter(Collider other)
+    /*private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Trigger"))
         {
@@ -198,5 +163,5 @@ public class CarController : MonoBehaviour
         }
 
 
-    }
+    }*/
 }
