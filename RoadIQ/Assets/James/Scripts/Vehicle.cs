@@ -2,8 +2,6 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using TMPro;
-using UnityEngine.SocialPlatforms.Impl;
-using System.Runtime.CompilerServices;
 
 public class CarController : MonoBehaviour
 {
@@ -19,6 +17,15 @@ public class CarController : MonoBehaviour
         Rear
     }
 
+    // NEW: Gear modes
+    public enum GearState
+    {
+        Park,
+        Reverse,
+        Neutral,
+        Drive
+    }
+
     [Serializable]
     public struct Wheel
     {
@@ -31,11 +38,29 @@ public class CarController : MonoBehaviour
 
     public ControlMode control;
 
-    public float maxAcceleration = 30.0f;
+    [Header("Movement")]
+    public float maxAcceleration = 30f;
+    public float turnSensitivity = 1f;
+    public float maxSteerAngle = 30f;
+    public int maxSpeed = 40;
 
-    public float turnSensitivity = 1.0f;
-    public float maxSteerAngle = 30.0f;
+    [Header("Gearbox")]
+    public GearState currentGear = GearState.Park;
 
+    public int currentDriveGear = 1;
+    public int maxDriveGear = 5;
+
+    // Torque multiplier for each gear
+    public float[] gearRatios =
+    {
+        3.5f, // Gear 1
+        2.8f, // Gear 2
+        2.0f, // Gear 3
+        1.5f, // Gear 4
+        1.0f  // Gear 5
+    };
+
+    [Header("Physics")]
     public Vector3 _centerOfMass;
 
     public List<Wheel> wheels;
@@ -48,69 +73,159 @@ public class CarController : MonoBehaviour
 
     private Rigidbody carRb;
 
-    [SerializeField] int maxspeed;
-    bool stopMoving;
-   
-    public void Start()
+    void Start()
     {
         carRb = GetComponent<Rigidbody>();
         carRb.centerOfMass = _centerOfMass;
-        moveInput = 1.0f;
         carRb.interpolation = RigidbodyInterpolation.Interpolate;
-
-        //carLights = GetComponent<CarLights>();
     }
 
-    public void FixedUpdate()
+    void FixedUpdate()
     {
         GetInputs();
-        AnimateWheels();
+        GearInput();
 
         Move();
         Steer();
-
+        AnimateWheels();
     }
 
-    public void SteerInput(float input)
-    {
-        steerInput = input;
-
-    }
     void GetInputs()
     {
-
         moveInput = Input.GetAxis("Vertical");
-
         steerInput = Input.GetAxis("Horizontal");
-
-     
-        
     }
 
+    // ---------------- GEAR INPUT ----------------
 
-    void MaxSpeed()
+    void GearInput()
     {
-        Debug.Log(carRb.velocity.magnitude);
-        if (carRb.velocity.magnitude > maxspeed)
+        if (Input.GetKeyDown(KeyCode.P))
         {
-            carRb.velocity = carRb.velocity.normalized * maxspeed;
+            currentGear = GearState.Park;
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            currentGear = GearState.Reverse;
+        }
+
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            currentGear = GearState.Neutral;
+        }
+
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            currentGear = GearState.Drive;
         }
     }
+
+    // ---------------- AUTOMATIC SHIFTING ----------------
+
+    /*void UpdateAutomaticGearbox()
+    {
+        float speed = carRb.velocity.magnitude;
+
+        if (speed > 30 && currentDriveGear < 5)
+            currentDriveGear = 5;
+
+        else if (speed > 24 && currentDriveGear < 4)
+            currentDriveGear = 4;
+
+        else if (speed > 18 && currentDriveGear < 3)
+            currentDriveGear = 3;
+
+        else if (speed > 10 && currentDriveGear < 2)
+            currentDriveGear = 2;
+
+        else
+            currentDriveGear = 1;
+    }*/
+
+    // ---------------- SPEED LIMIT ----------------
+
+   /* void MaxSpeed()
+    {
+        if (carRb.velocity.magnitude > maxSpeed)
+        {
+            carRb.velocity =
+                carRb.velocity.normalized * maxSpeed;
+        }
+    }*/
+
+    // ---------------- MOVE ----------------
 
     void Move()
     {
-        MaxSpeed();
+        //MaxSpeed();
+
+        float torque = 0;
+
+        switch (currentGear)
+        {
+            case GearState.Park:
+
+                // lock wheels
+                foreach (var wheel in wheels)
+                {
+                    wheel.wheelCollider.brakeTorque = 5000;
+                    wheel.wheelCollider.motorTorque = 0;
+                   
+                }
+                return;
+
+            case GearState.Neutral:
+
+                torque = 0;
+                break;
+
+            case GearState.Reverse:
+
+                if (moveInput <= 0)
+                {
+                    torque = 600 * maxAcceleration * moveInput;
+                }
+                
+                break;
+
+            case GearState.Drive:
+
+                //UpdateAutomaticGearbox();
+
+                /*foreach (var wheel in wheels)
+                {
+                    wheel.wheelCollider.motorTorque = 600 * maxAcceleration * moveInput * Time.fixedDeltaTime;
+
+                }*/
+                torque =
+                    600 *
+                    maxAcceleration *
+                    moveInput;
+
+                break;
+        }
 
         
+
         foreach (var wheel in wheels)
         {
-            wheel.wheelCollider.motorTorque = 600 * maxAcceleration * moveInput * Time.fixedDeltaTime;
+            if (Input.GetKey(KeyCode.Space))
+            {
 
+                wheel.wheelCollider.brakeTorque = 3000;
+                wheel.wheelCollider.motorTorque = 0;
+            }
 
+            wheel.wheelCollider.brakeTorque = 0;
+            
+            
+            wheel.wheelCollider.motorTorque =
+                torque * Time.fixedDeltaTime;
         }
-        
-        
     }
+
+    // ---------------- STEERING ----------------
 
     void Steer()
     {
@@ -118,11 +233,21 @@ public class CarController : MonoBehaviour
         {
             if (wheel.axel == Axel.Front)
             {
-                var _steerAngle = steerInput * turnSensitivity * maxSteerAngle;
-                wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);
+                float steerAngle =
+                    steerInput *
+                    turnSensitivity *
+                    maxSteerAngle;
+
+                wheel.wheelCollider.steerAngle =
+                    Mathf.Lerp(
+                        wheel.wheelCollider.steerAngle,
+                        steerAngle,
+                        0.6f);
             }
         }
     }
+
+    // ---------------- WHEEL ANIMATION ----------------
 
     void AnimateWheels()
     {
@@ -130,38 +255,27 @@ public class CarController : MonoBehaviour
         {
             Quaternion rot;
             Vector3 pos;
-            wheel.wheelCollider.GetWorldPose(out pos, out rot);
+
+            wheel.wheelCollider.GetWorldPose(
+                out pos,
+                out rot);
+
             wheel.wheelModel.transform.position = pos;
             wheel.wheelModel.transform.rotation = rot;
         }
     }
 
-   
-    /*private void OnCollisionEnter(Collision collision)
+    // ---------------- SCORE ----------------
+
+    private void OnTriggerEnter(Collider other)
     {
-        
-        // Only affect certain layers (like obstacles)
-        if (collision.gameObject.CompareTag("Obstacle"))
+        if (other.CompareTag("Trigger"))
         {
+            score++;
 
-            
-           
-
-        }
-    }*/
-
-
-    /*private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Trigger"))
-        {
-            
-            score += 1;
             ScoreText.text = score.ToString();
+
             other.gameObject.SetActive(false);
-            maxspeed += 1;
         }
-
-
-    }*/
+    }
 }
