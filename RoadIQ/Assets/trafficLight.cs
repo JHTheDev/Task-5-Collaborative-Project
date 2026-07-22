@@ -20,7 +20,7 @@ public class trafficLight : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !changing)
+        if (other.CompareTag("Trigger") && !changing)
         {
             StartCoroutine(TrafficSequence());
         }

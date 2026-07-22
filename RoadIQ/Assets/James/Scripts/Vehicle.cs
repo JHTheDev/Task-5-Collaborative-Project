@@ -280,7 +280,8 @@ public class CarController : MonoBehaviour
 
             ScoreText.text = score.ToString();
 
-            other.gameObject.SetActive(false);
+           
         }
     }
+
 }
