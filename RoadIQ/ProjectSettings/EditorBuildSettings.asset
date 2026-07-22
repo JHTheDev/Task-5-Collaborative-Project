@@ -6,9 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/James/MainMenu.unity
+    guid: 8bf3e7d8fc448354d9f5292a32cc207f
+  - enabled: 1
+    path: Assets/Scenes/James.unity
+    guid: d49b8a27e80996143b1e518975376e97
+  - enabled: 0
     path: Assets/Jaimil/Main Menu.unity
     guid: 573fbc1d14b4be943a573f2420afe0ae
-  - enabled: 1
+  - enabled: 0
     path: Assets/Jaimil/GameOver.unity
     guid: 555b8b03baa0f3846a1d141496bffe4d
   m_configObjects: {}

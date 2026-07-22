@@ -82,14 +82,19 @@ public class CarController : MonoBehaviour
 
     void FixedUpdate()
     {
-        GetInputs();
-        GearInput();
+        
+        
 
-        Move();
+        
         Steer();
         AnimateWheels();
     }
-
+    private void Update()
+    {
+        GearInput();
+        GetInputs();
+        Move();
+    }
     void GetInputs()
     {
         moveInput = Input.GetAxis("Vertical");
