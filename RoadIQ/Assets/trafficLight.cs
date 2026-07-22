@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class trafficLight : MonoBehaviour
@@ -22,6 +23,7 @@ public class trafficLight : MonoBehaviour
     {
         if (other.CompareTag("Trigger") && !changing)
         {
+            Console.WriteLine("triggeed");
             StartCoroutine(TrafficSequence());
         }
     }

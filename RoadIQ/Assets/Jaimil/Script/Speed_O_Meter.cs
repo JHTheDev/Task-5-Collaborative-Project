@@ -12,24 +12,19 @@ public class Speedometer : MonoBehaviour
     public bool showKPH = true;
 
     private float currentSpeed;
+    public float speedKPH;
 
     void Update()
     {
-        if (carRb == null || speedText == null)
-            return;
 
         // Calculate speed
         currentSpeed = carRb.velocity.magnitude;
 
         if (showKPH)
         {
-            float speedKPH = currentSpeed * speedmultiplyer;
+            speedKPH = currentSpeed * speedmultiplyer;
             speedText.text = Mathf.RoundToInt(speedKPH) + " km/h";
         }
-        else
-        {
-            float speedMPH = currentSpeed * 2.237f;
-            speedText.text = Mathf.RoundToInt(speedMPH) + " mph";
-        }
+      
     }
 }

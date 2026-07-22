@@ -2,6 +2,8 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using TMPro;
+using System.Collections;
+using UnityEditor;
 
 public class CarController : MonoBehaviour
 {
@@ -68,6 +70,8 @@ public class CarController : MonoBehaviour
     float moveInput;
     float steerInput;
 
+    public Speedometer SpeedometerScript;
+
     public float score = 0;
     public TextMeshProUGUI ScoreText;
 
@@ -78,6 +82,8 @@ public class CarController : MonoBehaviour
         carRb = GetComponent<Rigidbody>();
         carRb.centerOfMass = _centerOfMass;
         carRb.interpolation = RigidbodyInterpolation.Interpolate;
+
+        
     }
 
     void FixedUpdate()
@@ -94,6 +100,8 @@ public class CarController : MonoBehaviour
         GearInput();
         GetInputs();
         Move();
+        StartCoroutine(Speedcontrol2());
+
     }
     void GetInputs()
     {
@@ -270,11 +278,12 @@ public class CarController : MonoBehaviour
         }
     }
 
+
     // ---------------- SCORE ----------------
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Trigger"))
+        if (other.CompareTag("point"))
         {
             score++;
 
@@ -283,5 +292,26 @@ public class CarController : MonoBehaviour
            
         }
     }
+
+    [SerializeField] int roadSpeedlimit;
+
+    IEnumerator Speedcontrol2()
+    {
+        while (true)
+        {
+            if (SpeedometerScript.speedKPH > roadSpeedlimit)
+            {
+
+
+                score -= 1;
+                ScoreText.text = score.ToString();
+
+                yield return new WaitForSeconds(2);
+
+            }
+        }
+
+    }
+    
 
 }
