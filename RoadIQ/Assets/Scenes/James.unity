@@ -6446,7 +6446,6 @@ GameObject:
   - component: {fileID: 277289574}
   - component: {fileID: 277289573}
   - component: {fileID: 277289572}
-  - component: {fileID: 277289576}
   m_Layer: 0
   m_Name: Trigger
   m_TagString: Trigger
@@ -6540,23 +6539,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &277289576
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 277289570}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94e9275ab0b7d354d81b868bbf4fad4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  redLight: {fileID: 1894740857}
-  yellowLight: {fileID: 1923599045}
-  greenLight: {fileID: 1983637359}
-  yellowTime: 2
-  redTime: 5
 --- !u!1001 &287542966
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9171,6 +9153,39 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1348250740}
   m_SourcePrefab: {fileID: 100100000, guid: 307d6305223c6814fa5982f5bd7f0100, type: 3}
+--- !u!1 &663971546 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7597572677335538823, guid: 39d611d289bc36746ad20625c8abc0eb, type: 3}
+  m_PrefabInstance: {fileID: 1429798264}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &663971547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 663971546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94e9275ab0b7d354d81b868bbf4fad4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  redLight: {fileID: 1894740857}
+  yellowLight: {fileID: 0}
+  greenLight: {fileID: 1923599045}
+  yellowTime: 2
+  redTime: 5
+--- !u!114 &663971548 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -6360070408799144820, guid: 39d611d289bc36746ad20625c8abc0eb, type: 3}
+  m_PrefabInstance: {fileID: 1429798264}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 663971546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4ddc6b7802e8e941a5383443c443feb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &671247845
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18540,6 +18555,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4536622111813243693, guid: 39d611d289bc36746ad20625c8abc0eb, type: 3}
+      propertyPath: roadSpeedlimit
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4536622111813243693, guid: 39d611d289bc36746ad20625c8abc0eb, type: 3}
       propertyPath: maxAcceleration
       value: 15
       objectReference: {fileID: 0}
@@ -18547,6 +18566,10 @@ PrefabInstance:
       propertyPath: turnSensitivity
       value: 1.25
       objectReference: {fileID: 0}
+    - target: {fileID: 4536622111813243693, guid: 39d611d289bc36746ad20625c8abc0eb, type: 3}
+      propertyPath: SpeedometerScript
+      value: 
+      objectReference: {fileID: 663971548}
     - target: {fileID: 7597572677335538823, guid: 39d611d289bc36746ad20625c8abc0eb, type: 3}
       propertyPath: m_Name
       value: MuscleCar
@@ -18562,6 +18585,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 370728668}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7597572677335538823, guid: 39d611d289bc36746ad20625c8abc0eb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 663971547}
     - targetCorrespondingSourceObject: {fileID: 7727960801070518742, guid: 39d611d289bc36746ad20625c8abc0eb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 709726134}

@@ -306,9 +306,11 @@ public class CarController : MonoBehaviour
                 score -= 1;
                 ScoreText.text = score.ToString();
 
-                yield return new WaitForSeconds(2);
+                
 
             }
+
+            yield return new WaitForSeconds(2f);
         }
 
     }

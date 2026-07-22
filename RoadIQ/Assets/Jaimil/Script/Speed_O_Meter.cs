@@ -3,12 +3,12 @@ using TMPro;
 
 public class Speedometer : MonoBehaviour
 {
-    [Header("References")]
+    //References
     public Rigidbody carRb;
     public TextMeshProUGUI speedText;
     public float speedmultiplyer;
 
-    [Header("Settings")]
+    //Settings
     public bool showKPH = true;
 
     private float currentSpeed;
