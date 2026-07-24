@@ -8496,7 +8496,7 @@ GameObject:
   - component: {fileID: 370054121}
   m_Layer: 0
   m_Name: LevelEndTrigger
-  m_TagString: levelend
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -41778,7 +41778,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2904703226252582842, guid: 39d611d289bc36746ad20625c8abc0eb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.5
+      value: 109.8
       objectReference: {fileID: 0}
     - target: {fileID: 2904703226252582842, guid: 39d611d289bc36746ad20625c8abc0eb, type: 3}
       propertyPath: m_LocalPosition.y
@@ -41786,7 +41786,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2904703226252582842, guid: 39d611d289bc36746ad20625c8abc0eb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -70.7
+      value: 94.1
       objectReference: {fileID: 0}
     - target: {fileID: 2904703226252582842, guid: 39d611d289bc36746ad20625c8abc0eb, type: 3}
       propertyPath: m_LocalRotation.w

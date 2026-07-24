@@ -6,7 +6,6 @@ TagManager:
   tags:
   - Trigger
   - points
-  - levelend
   layers:
   - Default
   - TransparentFX

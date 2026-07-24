@@ -13,9 +13,10 @@ public class Endlevel : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("levelend"))
+        if (other.CompareTag("Player"))
         {
-            Invoke("levelended", 0.2f);
+            successtext.gameObject.SetActive(true);
+            Invoke("levelended", 3f);
         }
         
         
@@ -25,7 +26,7 @@ public class Endlevel : MonoBehaviour
     void levelended()
 
     {
-        successtext.gameObject.SetActive(true);
+        
         SceneManager.LoadScene(0);
     }
 }
