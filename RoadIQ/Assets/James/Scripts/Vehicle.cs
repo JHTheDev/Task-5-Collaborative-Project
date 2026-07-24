@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using System.Collections;
 using UnityEditor;
+using UnityEngine.SceneManagement;
 
 public class CarController : MonoBehaviour
 {
@@ -74,33 +75,41 @@ public class CarController : MonoBehaviour
 
     public float score = 0;
     public TextMeshProUGUI ScoreText;
+    public TextMeshProUGUI GameoverText;
+
+    public List<TextMeshProUGUI> gears;
 
     private Rigidbody carRb;
 
+    [SerializeField] GameObject backlights;
+    [SerializeField] GameObject frontlights;
+
+    // Booleans
+    bool backLightsOn = false;
+    bool Flightson = false;
+
     void Start()
     {
+        GearUI();
         carRb = GetComponent<Rigidbody>();
         carRb.centerOfMass = _centerOfMass;
         carRb.interpolation = RigidbodyInterpolation.Interpolate;
 
-        
+        StartCoroutine(Speedcontrol());
     }
 
     void FixedUpdate()
     {
-        
-        
-
-        
         Steer();
         AnimateWheels();
     }
     private void Update()
     {
+        GearUI();
         GearInput();
         GetInputs();
         Move();
-        StartCoroutine(Speedcontrol2());
+        scorefailCheck();
 
     }
     void GetInputs()
@@ -111,26 +120,78 @@ public class CarController : MonoBehaviour
 
     // ---------------- GEAR INPUT ----------------
 
+    void GearUI()
+    {
+
+        for (int i = 0; i < gears.Count; i++)
+        {
+
+            gears[i].color = Color.white;
+        }
+        switch (currentGear)
+        {
+            case GearState.Park:
+                gears[0].color = Color.green;
+                break;
+            case GearState.Reverse:
+                gears[1].color = Color.green;
+                break;
+            case GearState.Neutral:
+                gears[2].color = Color.green;
+                break;
+            case GearState.Drive:
+                gears[3].color = Color.green;
+                break;
+        }
+    }
+      
+    
+    
     void GearInput()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
+            GearUI();
             currentGear = GearState.Park;
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
+            GearUI();
+            
             currentGear = GearState.Reverse;
         }
 
-        if (Input.GetKeyDown(KeyCode.N))
+        if (Input.GetKeyDown(KeyCode.Alpha3))
         {
+            GearUI();
+          
             currentGear = GearState.Neutral;
         }
 
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.Alpha4))
         {
+            GearUI();
+           
             currentGear = GearState.Drive;
+        }
+
+        
+
+        // Other mechanics
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            if (Flightson == false)
+            {
+                frontlights.SetActive(true);
+                Flightson = true;
+            }
+            else
+            {
+                frontlights.SetActive(false);
+                Flightson = false;
+            }
+            
         }
     }
 
@@ -158,17 +219,18 @@ public class CarController : MonoBehaviour
 
     // ---------------- SPEED LIMIT ----------------
 
-   /* void MaxSpeed()
-    {
-        if (carRb.velocity.magnitude > maxSpeed)
-        {
-            carRb.velocity =
-                carRb.velocity.normalized * maxSpeed;
-        }
-    }*/
+    /* void MaxSpeed()
+     {
+         if (carRb.velocity.magnitude > maxSpeed)
+         {
+             carRb.velocity =
+                 carRb.velocity.normalized * maxSpeed;
+         }
+     }*/
 
     // ---------------- MOVE ----------------
 
+    
     void Move()
     {
         //MaxSpeed();
@@ -223,20 +285,44 @@ public class CarController : MonoBehaviour
 
         foreach (var wheel in wheels)
         {
+
+            
             if (Input.GetKey(KeyCode.Space))
             {
 
                 wheel.wheelCollider.brakeTorque = 3000;
                 wheel.wheelCollider.motorTorque = 0;
+
+                
+
+                if (backLightsOn == false)
+                {
+                    backlights.SetActive(true);
+                    backLightsOn = true;
+                }
+                
+                
+            }
+            else
+            {
+                wheel.wheelCollider.brakeTorque = 0;
+                if (backLightsOn == true)
+                {
+                    backlights.SetActive(false);
+                    backLightsOn = false;
+                }
+
+                wheel.wheelCollider.motorTorque = torque * Time.fixedDeltaTime;
             }
 
-            wheel.wheelCollider.brakeTorque = 0;
             
             
-            wheel.wheelCollider.motorTorque =
-                torque * Time.fixedDeltaTime;
+            
+            
         }
     }
+
+   
 
     // ---------------- STEERING ----------------
 
@@ -283,19 +369,58 @@ public class CarController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("point"))
+        if (other.CompareTag("points"))
         {
             score++;
+            Destroy(other.gameObject);
 
+           
             ScoreText.text = score.ToString();
 
            
         }
     }
+    
+
+    // Collision point takeoff
+    private bool obstaclexit;
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (obstaclexit == true)
+        {
+            score--;
+            obstaclexit = false;
+        }
+        
+        
+        ScoreText.text = score.ToString();
+    }
+    private void OnCollisionExit(Collision collision)
+    {
+        obstaclexit = true;
+    }
+
+    void scorefailCheck()
+    {
+        if (score < 0)
+        {
+            GameoverText.gameObject.SetActive(true);
+            GameoverText.text = "Failed Level \n Final Score:" + score.ToString();
+
+            Invoke("RestartScene", 5);
+            
+            
+        }
+    }
+
+    public void RestartScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 
     [SerializeField] int roadSpeedlimit;
 
-    IEnumerator Speedcontrol2()
+    IEnumerator Speedcontrol()
     {
         while (true)
         {
