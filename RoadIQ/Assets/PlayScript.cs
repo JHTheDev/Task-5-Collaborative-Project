@@ -5,10 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class PlayScript : MonoBehaviour
 {
-
-    public void PlayButton()
+    public string LevelName;
+    public void PlayButton(string level)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        
+        SceneManager.LoadScene(level);
+        
     }
 
 
